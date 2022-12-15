@@ -9,13 +9,13 @@ async function bootstrap() {
   
 
   // ** Express JS Engine
-  const app = await NestFactory.create(AppModule);
+  // const app = await NestFactory.create(AppModule);
 
   // ** Fastify Engine
-  // const app = await NestFactory.create<NestFastifyApplication>(
-  //   AppModule,
-  //   new FastifyAdapter()
-  // );
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter()
+  );
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
   .setTitle('Median')
