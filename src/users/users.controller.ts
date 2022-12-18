@@ -1,7 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetAllUserDto } from './dto/get-all-user.dto';
+import { GetUserIdDto } from './dto/get-user-id.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
+import { AtGuard } from 'src/common/guards';
 
 @Controller('users')
 export class UsersController {
@@ -12,13 +17,14 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AtGuard)
   @Get()
-  findAll() {
+  findAll(@Req()req: Request): Promise<GetAllUserDto[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<GetUserIdDto> {
     return this.usersService.findOne(+id);
   }
 

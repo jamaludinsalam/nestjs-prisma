@@ -41,10 +41,10 @@ export class AuthService implements OnModuleInit {
                     email: dto.email,
                     hash: hashedPassword,
                     hashedRt: null,
-                    phone: null,
+                    phone: dto.phone,
                     password: null,
-                    address: null,
-                    name: 'Jamaludin Salam'
+                    address: dto.address,
+                    name: dto.name
                 }
             })
             .catch((error) => {

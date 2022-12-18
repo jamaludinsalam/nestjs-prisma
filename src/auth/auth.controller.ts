@@ -11,6 +11,8 @@ import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.deco
 import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator';
 import { JwtGuard } from './guards/jwt.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { AtGuard, RtGuard } from 'src/common/guards';
+import { Public } from 'src/common/decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -25,13 +27,14 @@ export class AuthController {
         return await this.authService.signupLocal(dto)
     }
 
+    // @Public()
     @Post('local/signin')
     @HttpCode(HttpStatus.OK)
     async signinLocal(@Body() dto: SigninLocalDto): Promise<Tokens> {
        return await this.authService.signinLocal(dto)
     }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(AtGuard)
     @Post('logout')
     @HttpCode(HttpStatus.OK)
     logout(@GetCurrentUserId() userId: number): Promise<boolean> {
@@ -40,16 +43,14 @@ export class AuthController {
     }
 
     // @Public()
+    @UseGuards(RtGuard)
     @Post('refresh')
-    @UseGuards(JwtRefreshGuard)
     @HttpCode(HttpStatus.OK)
     refreshTokens(
         @GetCurrentUserId() userId: number,
-        @GetCurrentUser('refreshToken') refreshTokens: string
+        @GetCurrentUser('refreshToken') refreshToken: string
     ) {
-        console.log(userId)
-        console.log(refreshTokens)
-        // this.authService.refreshTokens(userId, refreshTokens)
+        return this.authService.refreshTokens(userId, refreshToken)
     }
 
 

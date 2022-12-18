@@ -1,8 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { user } from "@prisma/client";
-import { Exclude } from "class-transformer";
+import { Exclude, Expose } from "class-transformer";
 
-export class User implements user {
+export class GetUserIdDto {
     @ApiProperty()
     id: number;
 
@@ -12,14 +11,15 @@ export class User implements user {
     @ApiProperty()
     email: string;
 
-    // @ApiProperty()
-    @Exclude({ toPlainOnly: true })
+    @Exclude()
+    @ApiProperty()
     password: string;
 
-    // @ApiProperty()
     @Exclude()
+    @ApiProperty()
     hash: string;
 
+    @Exclude()
     @ApiProperty()
     hashedRt: string;
 
@@ -35,7 +35,5 @@ export class User implements user {
     @ApiProperty()
     updatedAt: Date;
 
-    constructor(partial: Partial<User>) {
-        Object.assign(this, partial)
-    }
+
 }
